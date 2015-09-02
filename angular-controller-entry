@@ -1,0 +1,31 @@
+module ChaiTea.Settings.Course.Controllers {
+
+    import commonSvc = ChaiTea.Common.Services;
+    import commonInterfaces = ChaiTea.Common.Interfaces;
+
+    class CourseEntry implements commonInterfaces.INgController {
+
+        courseForm: ng.IFormController;
+
+        static $inject = [
+            '$scope',
+            '$log',
+            'sitesettings',
+            'chaitea.services.base',
+        ];
+
+        constructor(
+            private $scope: ng.IScope,
+            private $log: ng.ILogService,
+            private sitesettings: ISiteSettings,
+            private apiSvc: ChaiTea.Services.IBaseSvc) {
+        }
+
+        public initialize = (id?: number): void => {
+
+        }
+
+    }
+
+    angular.module('app').controller('Settings.CourseEntry', CourseEntry);
+} 
