@@ -1,0 +1,66 @@
+module ChaiTea.Settings.Course.Controllers {
+
+    import commonInterfaces = ChaiTea.Common.Interfaces;
+    import settingsInterfaces = ChaiTea.Settings.Interfaces;
+
+    //use the the T4 interface, when ready
+    export interface ICourse {
+        CourseId: number;
+        Name: string;
+        ClientId: number;
+        ProgramId: number;
+        ProgramName: string;
+        EmployeeId: number;
+        EmployeeName: string;
+    }
+
+    class CourseIndex implements commonInterfaces.INgController {
+
+        basePath: string;
+        courses: Array<ICourse> = [];
+        cardItems: Array<ChaiTea.Components.CardList.Interfaces.IBasicRow> = [];
+
+        static $inject = [
+            '$scope',
+            '$log',
+            'sitesettings',
+            'chaitea.services.base',
+        ];
+
+        constructor(
+            private $scope: ng.IScope,
+            private $log: ng.ILogService,
+            private sitesettings: ISiteSettings,
+            private apiSvc: ChaiTea.Services.IBaseSvc) {
+
+            this.basePath = sitesettings.basePath;
+        }
+
+        public initialize = (): void => {
+
+            this.getAll();
+
+        }
+
+        public rowClick = (index: number): void => {
+
+            window.location.replace(this.basePath + 'Settings/Course/Entry/' + this.courses[index].CourseId);
+
+        }
+
+        private getAll = (): void => {
+
+            this.apiSvc.get('Endpoint').then((courses: Array<ICourse>) => {
+                this.courses = courses;
+                angular.forEach(courses,(c) => {
+                    this.cardItems.push(<ChaiTea.Components.CardList.Interfaces.IBasicRow>{ FirstHeading: c.Name, SecondHeading: c.EmployeeName, ThirdHeading: c.ProgramName });
+                });
+
+            });
+
+        }
+
+    }
+
+    angular.module('app').controller('Settings.CourseIndex', CourseIndex);
+} 
